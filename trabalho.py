@@ -39,7 +39,7 @@ def InversaModular(matriz, modulo):
         inversa = adjunta * pow(det_mod, modulo-2, modulo)
         return Modular(inversa, modulo)
 
-class CriptografoHill:
+class CifraHill:
     def __init__(self, senha):
         self.senha = list(senha)
 
@@ -143,7 +143,7 @@ while True:
             while True:
                 senha = input("Digite a senha: ").strip()
                 try:
-                    criptografo = CriptografoHill(senha)
+                    criptografo = CifraHill(senha)
                     break
                 except ValueError:
                     print('Impossível utilizar a senha digitada')
@@ -157,7 +157,7 @@ while True:
             while True:
                 senha = input("Digite a senha: ").strip()
                 try:
-                    criptografo = CriptografoHill(senha)
+                    criptografo = CifraHill(senha)
                     break
                 except ValueError:
                     print('Impossível utilizar a senha digitada')
