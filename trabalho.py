@@ -8,6 +8,9 @@ def pos(x):
 def char(x):
     return chr((round(x)+89)%89 + 38)
 
+'''
+Função para converter uma matriz para modular
+'''
 def Modular(matriz, modulo):
         linhas = []
         for i in range(matriz.shape[0]):
@@ -18,7 +21,13 @@ def Modular(matriz, modulo):
             linhas.append(linha)
         return np.array(linhas)
 
-
+'''
+Função para calcular a inversa modular da Matriz. A inversa modular é
+Igual à conjugada vezes o inverso modular do determinante da Matriz.
+A matriz conjugada será igual à matriz inversa convecional multiplicado pelo determinante,
+e, para o cálculo do inverso modular, será considerado que o módulo é primo,
+caso em que o inverso modular do determinante seré igual a este elevado ao modulo menos 2
+'''
 def InversaModular(matriz, modulo):
         modular = Modular(matriz, modulo)
         det_mod = round(np.linalg.det(modular)) % modulo
@@ -57,6 +66,8 @@ class CriptografoHill:
             linhas.append(linha)
             i+=n
         self.Matriz = np.array(linhas)
+        if np.linalg.det(self.Matriz) == 0:
+            raise ValueError("Matriz nao Invertível")
         self.MatrizInversaModular = InversaModular(self.Matriz, 89)
     
     def Criptografar(self, mensagem):
@@ -129,17 +140,27 @@ while True:
     match escolha:
 
         case 1:
-            senha = input("Digite a senha: ").strip()
-            criptografo = CriptografoHill(senha)
+            while True:
+                senha = input("Digite a senha: ").strip()
+                try:
+                    criptografo = CriptografoHill(senha)
+                    break
+                except ValueError:
+                    print('Impossível utilizar a senha digitada')
             mensagem = input("Digite a mensagem: ").strip()
             mensagem_criptografada = criptografo.Criptografar(mensagem)
             print()
-            print('\n', 'Mensagem criptografada:', mensagem_criptografada, end = '\n')
+            print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
             print()
         
         case 2:
-            senha = input("Digite a senha: ").strip()
-            criptografo = CriptografoHill(senha)
+            while True:
+                senha = input("Digite a senha: ").strip()
+                try:
+                    criptografo = CriptografoHill(senha)
+                    break
+                except ValueError:
+                    print('Impossível utilizar a senha digitada')
             mensagem_criptografada = input("Digite a mensagem criptografada: ").strip()
             mensagem_descriptografada = criptografo.Descriptografar(mensagem_criptografada)
             print()
