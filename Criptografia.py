@@ -1,12 +1,6 @@
 import numpy as np
-
-#Função para converter caracteres em números
-def pos(x):
-    return ord(x) - 38
-
-#Função para converter números em caracteres
-def char(x):
-    return chr((round(x)+89)%89 + 38)
+import string
+from bidict import bidict
 
 '''
 Função para converter uma matriz para modular
@@ -39,6 +33,15 @@ def InversaModular(matriz, modulo):
         inversa = adjunta * pow(det_mod, modulo-2, modulo)
         return Modular(inversa, modulo)
 
+
+#Caracteres indisponíveis : "`", "{", "|", "}", "~"
+caracteres_disponiveis = string.printable[:-11]
+
+modulo = len(caracteres_disponiveis)
+#cria um dicionario bidirecional, com caracteres como keys e numeros como values
+dicionario = bidict(zip(caracteres_disponiveis, range(modulo)))
+
+
 class CifraHill:
     def __init__(self, senha):
         self.senha = list(senha)
@@ -61,19 +64,19 @@ class CifraHill:
         while (i<pow(n, 2)):
             linha=[]
             for j in range(n):
-                c = pos(self.senha[i+j])
+                c = dicionario[self.senha[i+j]]
                 linha.append(c)
             linhas.append(linha)
             i+=n
         self.Matriz = np.array(linhas)
         if np.linalg.det(self.Matriz) == 0:
             raise ValueError("Matriz nao Invertível")
-        self.MatrizInversaModular = InversaModular(self.Matriz, 89)
+        self.MatrizInversaModular = InversaModular(self.Matriz, modulo)
     
     def Criptografar(self, mensagem):
         
         #Converte os caracteres da mensagem para números
-        vetor_mensagem = [pos(letra) for letra in mensagem]
+        vetor_mensagem = [dicionario[letra] for letra in mensagem]
 
         '''
         Caso o tamanho da mensagem não for um múltiplo inteiro da ordem da Matriz
@@ -82,7 +85,7 @@ class CifraHill:
         tamanho_vetor_i = len(vetor_mensagem)
         if tamanho_vetor_i%self.Matriz.shape[0] != 0:
             for _ in range(self.Matriz.shape[0] - tamanho_vetor_i%self.Matriz.shape[0]):
-                vetor_mensagem.append(pos("("))
+                vetor_mensagem.append(dicionario["("])
 
         '''
         Como uma Matriz de ordem n só pode multiplicar um vetor com n elementos,
@@ -99,12 +102,12 @@ class CifraHill:
 
         mensagem_criptografada = ""
         for n in vetor_mensagem_criptografada:
-            mensagem_criptografada += char(n)
+            mensagem_criptografada += dicionario.inverse[n%modulo]
 
         return mensagem_criptografada
     
     def Descriptografar(self, mensagem):
-        vetor_mensagem = [pos(letra) for letra in mensagem]
+        vetor_mensagem = [dicionario[letra] for letra in mensagem]
         mensagem_descriptografada = ""
 
         '''
@@ -118,7 +121,7 @@ class CifraHill:
                 vetor_i.append(vetor_mensagem[j + i*self.Matriz.shape[0]])
             vetor_f = self.MatrizInversaModular @ vetor_i
             for x in vetor_f:
-                mensagem_descriptografada += char(x)
+                mensagem_descriptografada += dicionario.inverse[x%89]
 
         # Remove os caracteres ( adicionados à mensagem original
         while True:

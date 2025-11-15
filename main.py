@@ -17,12 +17,20 @@ while True:
                     criptografo = CifraHill(senha)
                     break
                 except ValueError:
-                    print('Impossível utilizar a senha digitada')
+                    print('Impossível utilizar a senha digitada, matriz não invertível')
+                except KeyError:
+                    print('Impossível utilizar a senha digitada, caractere não suportado')
             mensagem = input("Digite a mensagem: ").strip()
-            mensagem_criptografada = criptografo.Criptografar(mensagem)
-            print()
-            print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
-            print()
+            while True:
+                try:
+                    mensagem_criptografada = criptografo.Criptografar(mensagem)
+                    print()
+                    print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
+                    print()
+                    break
+                except KeyError:
+                    print('Impossível criptografar a mensagem digitada, caractere não suportado')
+            
         
         case 2:
             while True:
@@ -31,12 +39,17 @@ while True:
                     criptografo = CifraHill(senha)
                     break
                 except ValueError:
-                    print('Impossível utilizar a senha digitada')
-            mensagem_criptografada = input("Digite a mensagem criptografada: ").strip()
-            mensagem_descriptografada = criptografo.Descriptografar(mensagem_criptografada)
-            print()
-            print('Mensagem descriptografada:', mensagem_descriptografada)
-            print()
+                    print('Impossível utilizar a senha digitada, matriz não invertível')
+            while True:
+                try:
+                    mensagem_criptografada = input("Digite a mensagem criptografada: ").strip()
+                    mensagem_descriptografada = criptografo.Descriptografar(mensagem_criptografada)
+                    print()
+                    print('Mensagem descriptografada:', mensagem_descriptografada)
+                    print()
+                    break
+                except KeyError:
+                    print('Impossível criptografar a mensagem digitada, caractere não suportado')
 
         case 0:
             break
