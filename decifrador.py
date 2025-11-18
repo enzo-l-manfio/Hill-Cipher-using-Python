@@ -1,49 +1,57 @@
 import Criptografia as cript
 import numpy as np
 
+def divisores(n):
+    divisores = []
+    for i in range(1, n+1):
+        if n%i != 0 :
+            continue
+        else:
+            divisores.append(i)
+    return divisores
+
 def Decifrar(blocos_descriptografados, blocos_criptografados):
+    if len(blocos_descriptografados) != len(blocos_criptografados) :
+        raise ValueError("blocos descriptografados não correspondem aos blocos criptografados")
+    for i in range(len(blocos_descriptografados)) :
+        if len(blocos_descriptografados[i]) != len(blocos_criptografados[i]) :
+            raise ValueError("blocos descriptografados não correspondem aos blocos criptografados")
+
     conjunto_descriptografado = ''
     conjunto_criptografado = ''
-    n = np.lcm.reduce([len(bloco) for bloco in blocos_criptografados])
+    mdc = np.gcd.reduce([len(bloco) for bloco in blocos_criptografados])
+    if mdc == 1:
+        raise ValueError("Vetores de tamanhos primos entre si")
     for i in range(len(blocos_criptografados)):
         conjunto_descriptografado += blocos_descriptografados[i]
         conjunto_criptografado += blocos_criptografados[i]
+    possiveis_matrizes = []
+
+    for n in (divisores(mdc)) :
     
-    linhas = []
-    i = 0
-    while (i<pow(n, 2)):
-        linha=[]
-        for j in range(n):
-            c = cript.dicionario[conjunto_descriptografado[i+j]]
-            linha.append(c)
-        linhas.append(linha)
-        i+=n
-    MatrizDescriptografada = np.array(linhas)
+        if len(conjunto_descriptografado) < n**2:
+            continue
+        
+        MatrizDescriptografada = cript.CriarMatrizString(conjunto_descriptografado, [n, n])
+        MatrizCriptografada = cript.CriarMatrizString(conjunto_criptografado, [n, n])
 
-    linhas = []
-    i = 0
-    while (i<pow(n, 2)):
-        linha=[]
-        for j in range(n):
-            c = cript.dicionario[conjunto_criptografado[i+j]]
-            linha.append(c)
-        linhas.append(linha)
-        i+=n
-    MatrizCriptografada = np.array(linhas)
-
-    # K = ( D^-1 * C)^T , em que K é a matriz chave, D a dos blocos descriptografados e C a dos blocos criptografados
-    MatrizChave = np.transpose(cript.InversaModular(MatrizDescriptografada, cript.modulo) @ MatrizCriptografada)
-    return cript.Modular(MatrizChave, cript.modulo)
+        # K = C * D^-1 , em que K é a matriz chave, D a dos blocos descriptografados e C a dos blocos criptografados
+        MatrizChave = MatrizCriptografada @ cript.InversaModular(MatrizDescriptografada, cript.modulo)
+        MatrizChave = cript.Modular(MatrizChave, cript.modulo)
+        possiveis_matrizes.append(MatrizChave)
+    return possiveis_matrizes
 
 
 
-Cifra = cript.CifraHill("CriptografiaHill")
+Cifra = cript.CifraHill("EnzoKayc1")
 
-blocos_descriptografados = ["Enzo", "sabo", "sexo", "paes"]
+blocos_descriptografados = ["Angulegal"]
 blocos_criptografados = [Cifra.Criptografar(mensagem) for mensagem in blocos_descriptografados]
-
-
 
 print(Cifra.Matriz)
 
-print(Decifrar(blocos_descriptografados, blocos_criptografados))
+possiveis_matrizes = Decifrar(blocos_descriptografados, blocos_criptografados)
+
+for possibilidade in possiveis_matrizes:
+    print()
+    print(possibilidade)

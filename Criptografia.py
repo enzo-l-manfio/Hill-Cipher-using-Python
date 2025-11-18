@@ -44,11 +44,12 @@ dicionario = bidict(zip(caracteres_disponiveis, range(modulo)))
 
 #função para converter uma string em uma matriz de determinada ordem
 def CriarMatrizString(string, ordem):
+    ordem = [int(o) for o in ordem]
     tamanho_string = len(string)
     for _ in range(int(ordem[0]*ordem[1]-tamanho_string)):
             string.append("(")
         
-    # Cria a Matriz a partir da senha, e determina a sua Inversa Modular
+    # Cria a Matriz a partir da senha
     colunas = []
     for j in range(ordem[1]):
         coluna = []
@@ -59,9 +60,10 @@ def CriarMatrizString(string, ordem):
 
 def CriarStringMatriz(matriz):
     string = ''
-    for linha in matriz:
-        for elemento in linha:
-            string += dicionario.inverse[elemento]
+    matriz = np.transpose(matriz)
+    for coluna in matriz:
+        for elemento in coluna:
+            string += dicionario.inverse[elemento%modulo]
     return string
 
 
@@ -95,7 +97,7 @@ class CifraHill:
                 mensagem += "("
 
         #representa a mensagem como uma matriz e multiplica esta pela chave para criptografar
-        ordem = [int(self.Matriz.shape[0]), int(len(mensagem)/self.Matriz.shape[0])]
+        ordem = [self.Matriz.shape[0], len(mensagem)/self.Matriz.shape[0]]
         matriz_mensagem = CriarMatrizString(mensagem, ordem)
         matriz_mensagem_criptografada = Modular(self.Matriz @ matriz_mensagem, modulo)
 
@@ -108,7 +110,7 @@ class CifraHill:
              raise ValueError("Mensagem de tamanho incompatível com o da senha")
     
         #Representa a mensagem criptografada como uma matriz e a multiplica pela inversa para descriptografar
-        ordem = [int(self.Matriz.shape[0]), int(len(mensagem)/self.Matriz.shape[0])]
+        ordem = [self.Matriz.shape[0], len(mensagem)/self.Matriz.shape[0]]
         matriz_mensagem_criptografada = CriarMatrizString(mensagem, ordem)
         matriz_mensagem_descriptografada = Modular ( self.MatrizInversaModular @ matriz_mensagem_criptografada, modulo)
 
