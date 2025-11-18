@@ -1,3 +1,4 @@
+import Criptografia
 from Criptografia import CifraHill
 
 
@@ -20,8 +21,8 @@ while True:
                     print('Impossível utilizar a senha digitada, matriz não invertível')
                 except KeyError:
                     print('Impossível utilizar a senha digitada, caractere não suportado')
-            mensagem = input("Digite a mensagem: ").strip()
             while True:
+                mensagem = input("Digite a mensagem: ").strip()
                 try:
                     mensagem_criptografada = criptografo.Criptografar(mensagem)
                     print()

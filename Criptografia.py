@@ -42,6 +42,29 @@ modulo = len(caracteres_disponiveis)
 dicionario = bidict(zip(caracteres_disponiveis, range(modulo)))
 
 
+#função para converter uma string em uma matriz de determinada ordem
+def CriarMatrizString(string, ordem):
+    tamanho_string = len(string)
+    for _ in range(int(ordem[0]*ordem[1]-tamanho_string)):
+            string.append("(")
+        
+    # Cria a Matriz a partir da senha, e determina a sua Inversa Modular
+    colunas = []
+    for j in range(ordem[1]):
+        coluna = []
+        for i in range(ordem[0]):
+            coluna.append( dicionario[string[i + j*ordem[0]]] )
+        colunas.append(coluna)
+    return np.transpose(np.array(colunas))
+
+def CriarStringMatriz(matriz):
+    string = ''
+    for linha in matriz:
+        for elemento in linha:
+            string += dicionario.inverse[elemento]
+    return string
+
+
 class CifraHill:
     def __init__(self, senha):
         self.senha = list(senha)
@@ -52,76 +75,44 @@ class CifraHill:
         Para poder criar uma Matriz Quadrada de ordem n a partir da senha
         '''
         n = 0
-        self.tamanho_senha = len(self.senha)
-        while(pow(n, 2)<self.tamanho_senha):
+        while(pow(n, 2)<len(self.senha)):
             n += 1
-        for _ in range(pow(n, 2)-self.tamanho_senha):
-            self.senha.append("(")
-        
         # Cria a Matriz a partir da senha, e determina a sua Inversa Modular
-        linhas = []
-        i = 0
-        while (i<pow(n, 2)):
-            linha=[]
-            for j in range(n):
-                c = dicionario[self.senha[i+j]]
-                linha.append(c)
-            linhas.append(linha)
-            i+=n
-        self.Matriz = np.array(linhas)
+        self.Matriz = CriarMatrizString(self.senha, [n, n])
         if np.linalg.det(self.Matriz) == 0:
             raise ValueError("Matriz nao Invertível")
         self.MatrizInversaModular = InversaModular(self.Matriz, modulo)
     
     def Criptografar(self, mensagem):
         
-        #Converte os caracteres da mensagem para números
-        vetor_mensagem = [dicionario[letra] for letra in mensagem]
-
         '''
         Caso o tamanho da mensagem não for um múltiplo inteiro da ordem da Matriz
         Adiciona o caractere ( ao final, até esse ser o caso
         '''
-        tamanho_vetor_i = len(vetor_mensagem)
-        if tamanho_vetor_i%self.Matriz.shape[0] != 0:
-            for _ in range(self.Matriz.shape[0] - tamanho_vetor_i%self.Matriz.shape[0]):
-                vetor_mensagem.append(dicionario["("])
+        tamanho_mensagem = len(mensagem)
+        if tamanho_mensagem%self.Matriz.shape[0] != 0:
+            for _ in range(self.Matriz.shape[0] - tamanho_mensagem%self.Matriz.shape[0]):
+                mensagem += "("
 
-        '''
-        Como uma Matriz de ordem n só pode multiplicar um vetor com n elementos,
-        o vetor mensagem será dividido em múltiplos vetores de ordem n, os quais serão
-        multiplicados pela Matriz e reagrupados para formar a mensagem criptografada
-        '''
-        vetor_mensagem_criptografada = []
-        for i in range(int(len(vetor_mensagem) / self.Matriz.shape[0])):
-            vetor_i = []
-            for j in range(self.Matriz.shape[0]):
-                vetor_i.append(vetor_mensagem[j + i*self.Matriz.shape[0]])
-            vetor_f = self.Matriz @ vetor_i
-            vetor_mensagem_criptografada += [x for x in vetor_f]
+        #representa a mensagem como uma matriz e multiplica esta pela chave para criptografar
+        ordem = [int(self.Matriz.shape[0]), int(len(mensagem)/self.Matriz.shape[0])]
+        matriz_mensagem = CriarMatrizString(mensagem, ordem)
+        matriz_mensagem_criptografada = Modular(self.Matriz @ matriz_mensagem, modulo)
 
-        mensagem_criptografada = ""
-        for n in vetor_mensagem_criptografada:
-            mensagem_criptografada += dicionario.inverse[n%modulo]
-
+        #converte a matriz resultado em uma string
+        mensagem_criptografada = CriarStringMatriz(matriz_mensagem_criptografada)
         return mensagem_criptografada
     
     def Descriptografar(self, mensagem):
-        vetor_mensagem = [dicionario[letra] for letra in mensagem]
-        mensagem_descriptografada = ""
+        if len(mensagem) % self.Matriz.shape[0] != 0:
+             raise ValueError("Mensagem de tamanho incompatível com o da senha")
+    
+        #Representa a mensagem criptografada como uma matriz e a multiplica pela inversa para descriptografar
+        ordem = [int(self.Matriz.shape[0]), int(len(mensagem)/self.Matriz.shape[0])]
+        matriz_mensagem_criptografada = CriarMatrizString(mensagem, ordem)
+        matriz_mensagem_descriptografada = Modular ( self.MatrizInversaModular @ matriz_mensagem_criptografada, modulo)
 
-        '''
-        Divide o vetor mensagem em múltiplos vetores de ordem n,
-        multiplica eles pela Inversa, e adiciona os caracteres correspondentes
-        aos seus respectivos elementos numéricos para formar a mensagem original
-        '''
-        for i in range(int(len(vetor_mensagem) / self.Matriz.shape[0])):
-            vetor_i = []
-            for j in range(self.Matriz.shape[0]):
-                vetor_i.append(vetor_mensagem[j + i*self.Matriz.shape[0]])
-            vetor_f = self.MatrizInversaModular @ vetor_i
-            for x in vetor_f:
-                mensagem_descriptografada += dicionario.inverse[x%89]
+        mensagem_descriptografada = CriarStringMatriz(matriz_mensagem_descriptografada)
 
         # Remove os caracteres ( adicionados à mensagem original
         while True:
