@@ -38,15 +38,23 @@ def Decifrar(blocos_descriptografados, blocos_criptografados):
         # K = C * D^-1 , em que K é a matriz chave, D a dos blocos descriptografados e C a dos blocos criptografados
         MatrizChave = MatrizCriptografada @ cript.InversaModular(MatrizDescriptografada, cript.modulo)
         MatrizChave = cript.Modular(MatrizChave, cript.modulo)
-        possiveis_matrizes.append(MatrizChave)
+        ordem = [n, len(conjunto_criptografado)//n]
+
+        D = cript.CriarMatrizString(conjunto_descriptografado, ordem)
+        C = cript.CriarMatrizString(conjunto_criptografado, ordem)
+        matrizProduto = cript.Modular(MatrizChave @ D, cript.modulo)
+        
+        if np.array_equal(matrizProduto, C) :
+            possiveis_matrizes.append(MatrizChave)
+
     return possiveis_matrizes
 
 
 
-Cifra = cript.CifraHill("EnzoKayc1")
+Cifra = cript.CifraHill("Joselia")
 
-blocos_descriptografados = ["Angulegal"]
-blocos_criptografados = [Cifra.Criptografar(mensagem) for mensagem in blocos_descriptografados]
+blocos_descriptografados = ["123456", "uyi"]
+blocos_criptografados = ["654321", "//1"]
 
 print(Cifra.Matriz)
 

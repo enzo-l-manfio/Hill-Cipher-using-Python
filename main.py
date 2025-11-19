@@ -50,7 +50,9 @@ while True:
                     print()
                     break
                 except KeyError:
-                    print('Impossível criptografar a mensagem digitada, caractere não suportado')
+                    print('Impossível descriptografar a mensagem digitada, caractere não suportado')
+                except ValueError:
+                    print("Impossível descriptografar a mensagem digitada, tamanho da senha e mensagem incompatíveis")
 
         case 0:
             break
