@@ -1,8 +1,8 @@
-import AlgoritimoCriptografia
+import AlgoritmoCriptografia
 
-class GerenciadorDeCriptografia:
+class Criptografo:
 
-    def __init__(self,AlgoritimoCriptografia: AlgoritimoCriptografia):
+    def __init__(self,AlgoritimoCriptografia: AlgoritmoCriptografia):
         self.algoritimo = AlgoritimoCriptografia
 
     def criptografar(self, mensagem: str) -> str:

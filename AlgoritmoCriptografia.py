@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class AlgoritimoCriptografia:
+class AlgoritmoCriptografia:
     @abstractmethod
     def criptografar(self, texto: str) -> str:
         pass
