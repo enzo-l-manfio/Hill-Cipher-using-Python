@@ -15,7 +15,7 @@ while True:
     print('0 - Sair')
     escolha = int(input().strip())
 
-    if(escolha == 1 or escolha == 2):
+    if escolha == 1 or escolha == 2 :
         
         cifraDeHill = None
         while True:
@@ -40,24 +40,20 @@ while True:
                 criptografo = Criptografo(cifraDeHill)
                 
                 try:
-                    match escolha:
-                        case 1:
-                            mensagem_criptografada = criptografo.criptografar(mensagem)
-                            print('Mensagem criptografada:', mensagem_criptografada)
-                            print()
-                            break
-                        case 2:
-                            mensagem_descriptografada = criptografo.descriptografar(mensagem)
-                            
-                            print()
-                            print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')
-                            print()
-                            break
-                        case 0:
-                            break      
+                    if escolha == 1:
+                        mensagem_criptografada = criptografo.criptografar(mensagem)
+                        print('Mensagem criptografada:', mensagem_criptografada)
+                        print()
+                        break
+                    else:
+                        mensagem_descriptografada = criptografo.descriptografar(mensagem)
+                        print()
+                        print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')
+                        print()
+                        break
                 except KeyError:
                     print('Impossível criptografar/descriptografar a mensagem digitada, caractere não suportado')
                 except ValueError:
                     print("Impossível descriptografar a mensagem digitada, tamanho da senha e mensagem incompatíveis")
-    elif(escolha == 0):
+    elif escolha == 0 :
         break

@@ -87,7 +87,7 @@ class MatrizModular(np.ndarray):
         matriz = np.transpose(cls)
         for coluna in matriz:
             for elemento in coluna:
-                string += dicionario.inverse[round(elemento%cls.modulo)]
+                string += dicionario.inverse[round(elemento)%cls.modulo]
         return string
 
 

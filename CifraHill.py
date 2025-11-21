@@ -23,7 +23,7 @@ class CifraHill(AlgoritmoCriptografia):
             n += 1
 
         for _ in range( n**2 - len(senha)):
-            senha += self.dicionario.inverse[0]
+            senha += self.dicionario.inverse[self.modulo - 1]
 
         # Cria a Matriz a partir da senha, e determina a sua Inversa Modular
         self.Matriz = MatrizModular(senha,self.modulo,[n,n],self.dicionario)
@@ -52,7 +52,7 @@ class CifraHill(AlgoritmoCriptografia):
     
     def descriptografar(self, mensagem):
         if len(mensagem) % self.Matriz.shape[0] != 0:
-             raise ValueError("Mensagem de tamanho incompatível com o da senha")
+            raise ValueError("Mensagem de tamanho incompatível com o da senha")
     
         #Representa a mensagem criptografada como uma matriz e a multiplica pela inversa para descriptografar
         ordem = [self.Matriz.shape[0], len(mensagem)/self.Matriz.shape[0]]
