@@ -1,6 +1,5 @@
-
-from Criptografia import CifraHill
-
+import GerenciadorDeCriptografia
+import CifraDeHill
 
 while True:
 
@@ -9,50 +8,54 @@ while True:
     print('2 - Descriptografar')
     print('0 - Sair')
     escolha = int(input().strip())
-    match escolha:
 
-        case 1:
-            while True:
-                senha = input("Digite a senha: ").strip()
-                try:
-                    criptografo = CifraHill(senha)
-                    break
-                except ValueError:
-                    print('Impossível utilizar a senha digitada, matriz não invertível')
-                except KeyError:
-                    print('Impossível utilizar a senha digitada, caractere não suportado')
-            while True:
-                mensagem = input("Digite a mensagem: ").strip()
-                try:
-                    mensagem_criptografada = criptografo.Criptografar(mensagem)
-                    print()
-                    print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
-                    print()
-                    break
-                except KeyError:
-                    print('Impossível criptografar a mensagem digitada, caractere não suportado')
-            
+    if(escolha == 1 or escolha == 2):
         
-        case 2:
-            while True:
-                senha = input("Digite a senha: ").strip()
+        cifraDeHill = None
+        while True:
+                
+            # Obtem senha (chave), a qual será utilizada para encriptar/decriptar a mensagem
+            senha = input("Digite a senha: ").strip()
+
+
+            # Cria um objeto CifraDeHill com a senha fornecida, caso essa seja válida.
+            try:
+                cifraDeHill = CifraDeHill.CifraDeHill(senha)
+                break
+            except ValueError:
+                print('Impossível utilizar a senha digitada, matriz não invertível')
+            except KeyError:
+                print('Impossível utilizar a senha digitada, caractere não suportado')
+        
+        while True:
+
+                # Obtem a mensagem a ser encriptada/decriptada
+                mensagem = input("Digite a mensagem: ").strip()
+                
+                # Cria um gerenciador de criptografia e define a cifra de Hill como o algoritmo a ser utilizado
+                gerenciador = GerenciadorDeCriptografia.GerenciadorDeCriptografia(cifraDeHill)
+                
                 try:
-                    criptografo = CifraHill(senha)
-                    break
-                except ValueError:
-                    print('Impossível utilizar a senha digitada, matriz não invertível')
-            while True:
-                try:
-                    mensagem_criptografada = input("Digite a mensagem criptografada: ").strip()
-                    mensagem_descriptografada = criptografo.Descriptografar(mensagem_criptografada)
-                    print()
-                    print('Mensagem descriptografada:', mensagem_descriptografada)
-                    print()
-                    break
+                    match escolha:
+                        case 1:
+                            mensagem_criptografada = gerenciador.criptografar(mensagem)
+                    
+                            print()
+                            print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
+                            print()
+                            break
+                        case 2:
+                            mensagem_descriptografada = gerenciador.descriptografar(mensagem)
+                            
+                            print()
+                            print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')
+                            print()
+                            break
+                        case 0:
+                            break      
                 except KeyError:
-                    print('Impossível descriptografar a mensagem digitada, caractere não suportado')
+                    print('Impossível criptografar/descriptografar a mensagem digitada, caractere não suportado')
                 except ValueError:
                     print("Impossível descriptografar a mensagem digitada, tamanho da senha e mensagem incompatíveis")
-
-        case 0:
-            break
+    elif(escolha == 0):
+        break
