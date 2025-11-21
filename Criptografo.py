@@ -1,6 +1,6 @@
 import AlgoritmoCriptografia
 
-class Cifra:
+class Criptografo:
 
     def __init__(self,AlgoritimoCriptografia: AlgoritmoCriptografia):
         self.algoritimo = AlgoritimoCriptografia

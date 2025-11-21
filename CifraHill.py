@@ -3,7 +3,7 @@ from MatrizModular import MatrizModular
 from bidict import bidict
 from sympy import isprime
 
-class CifraDeHill(AlgoritmoCriptografia):
+class CifraHill(AlgoritmoCriptografia):
 
     
     def __init__(self, alfabeto, senha):

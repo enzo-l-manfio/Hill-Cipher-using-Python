@@ -1,5 +1,5 @@
-from GerenciadorDeCriptografia import Cifra
-import CifraDeHill
+from Criptografo import Criptografo
+from CifraHill import CifraHill
 import string
 
 
@@ -19,12 +19,12 @@ while True:
         
         cifraDeHill = None
         while True:
-                
+
             # Obtem senha (chave), a qual será utilizada para encriptar/decriptar a mensagem
             senha = input("Digite a senha: ").strip()
             # Cria um objeto CifraDeHill com a senha fornecida, caso essa seja válida.
             try:
-                cifraDeHill = CifraDeHill.CifraDeHill(alfabeto, senha)
+                cifraDeHill = CifraHill(alfabeto, senha)
                 break
             except ValueError:
                 print('Impossível utilizar a senha digitada, matriz não invertível')
@@ -36,18 +36,18 @@ while True:
                 # Obtem a mensagem a ser encriptada/decriptada
                 mensagem = input("Digite a mensagem: ").strip()
                 
-                # Cria um gerenciador de criptografia e define a cifra de Hill como o algoritmo a ser utilizado
-                cifra = Cifra(cifraDeHill)
+                # Cria uma Cifra e define a cifra de Hill como o algoritmo a ser utilizado
+                criptografo = Criptografo(cifraDeHill)
                 
                 try:
                     match escolha:
                         case 1:
-                            mensagem_criptografada = cifra.criptografar(mensagem)
-                            print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
+                            mensagem_criptografada = criptografo.criptografar(mensagem)
+                            print('Mensagem criptografada:', mensagem_criptografada)
                             print()
                             break
                         case 2:
-                            mensagem_descriptografada = cifra.descriptografar(mensagem)
+                            mensagem_descriptografada = criptografo.descriptografar(mensagem)
                             
                             print()
                             print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')

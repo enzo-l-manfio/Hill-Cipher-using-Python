@@ -33,15 +33,13 @@ class MatrizModular(np.ndarray):
         
         return obj
 
+    #sobrecarrega o operador * para retornar matrizes modulares
     def __mul__(self, other):
-        tipos_escalares = [int, float, np.float64]
-        if type(other) in tipos_escalares:
-            #Converte a Matriz Modular em um ndarray, multiplica pela matriz, e transforma o resultado em MatrizModular
-            ndarray = self.view(np.ndarray)
-            return MatrizModular( ndarray*other, self.modulo)
-        else:
-            raise TypeError(f"Operação de multiplicação por escalar indefinida para {type(other)}")
-        
+        #Converte a Matriz Modular em um ndarray, multiplica pela matriz, e transforma o resultado em MatrizModular
+        ndarray = self.view(np.ndarray)
+        return MatrizModular( ndarray*other, self.modulo)
+
+    #sobrecarrega o operador @ para retornar matrizes modulares
     def __matmul__(self, other):
         ndarray = self.view(np.ndarray)
         return MatrizModular(ndarray@other, self.modulo)
@@ -53,7 +51,6 @@ class MatrizModular(np.ndarray):
     e, para o cálculo do inverso modular, será considerado que o módulo é primo,
     caso em que o inverso modular do determinante seré igual a este elevado ao modulo menos 2
     '''
-
     def InversaModular(cls):
             if np.linalg.det(cls) == 0:
                 raise ValueError("Matriz nao Invertível")
@@ -90,7 +87,7 @@ class MatrizModular(np.ndarray):
         matriz = np.transpose(cls)
         for coluna in matriz:
             for elemento in coluna:
-                string += dicionario.inverse[elemento%cls.modulo]
+                string += dicionario.inverse[round(elemento%cls.modulo)]
         return string
 
 
