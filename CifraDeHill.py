@@ -1,21 +1,18 @@
-import AlgoritimoCriptografia
-import MatrizModular
-import string
+from AlgoritmoCriptografia import AlgoritmoCriptografia
+from MatrizModular import MatrizModular
 from bidict import bidict
+from sympy import isprime
 
-class CifraDeHill(AlgoritimoCriptografia.AlgoritimoCriptografia):
+class CifraDeHill(AlgoritmoCriptografia):
 
-    #Caracteres indisponíveis : "`", "{", "|", "}", "~"
-    caracteres_disponiveis = string.printable[:-11]
     
-    modulo = len(caracteres_disponiveis)
-
-    #cria um dicionario bidirecional, com caracteres como keys e numeros como values
-    dicionario = bidict(zip(caracteres_disponiveis, range(modulo)))
-    
-    def __init__(self, senha):
-        self.senha = list(senha)
-
+    def __init__(self, alfabeto, senha):
+        self.modulo = len(alfabeto)
+        if not isprime(self.modulo) :
+            raise ValueError("Modulo precisa ser primo")
+        self.senha = senha
+        #cria um dicionario bidirecional, com caracteres como keys e numeros como values
+        self.dicionario =bidict(zip(alfabeto, range(self.modulo)))
         '''
         Calcula o menor quadrado perfeito maior ou igual ao tamanho da senha, n^2,
         E adiciona o caractere ( ao final da senha até completar esse valor,
@@ -25,11 +22,14 @@ class CifraDeHill(AlgoritimoCriptografia.AlgoritimoCriptografia):
         while(pow(n, 2)<len(self.senha)):
             n += 1
 
+        for _ in range( n**2 - len(senha)):
+            senha += self.dicionario.inverse[0]
+
         # Cria a Matriz a partir da senha, e determina a sua Inversa Modular
-        self.Matriz = MatrizModular.MatrizModular(str(self.senha),self.modulo,[n,n],self.dicionario)
+        self.Matriz = MatrizModular(senha,self.modulo,[n,n],self.dicionario)
         self.MatrizInversaModular = self.Matriz.InversaModular()
         
-        
+
     
     def criptografar(self, mensagem):
         
@@ -40,13 +40,12 @@ class CifraDeHill(AlgoritimoCriptografia.AlgoritimoCriptografia):
         tamanho_mensagem = len(mensagem)
         if tamanho_mensagem%self.Matriz.shape[0] != 0:
             for _ in range(self.Matriz.shape[0] - tamanho_mensagem%self.Matriz.shape[0]):
-                mensagem += "("
+                mensagem += self.dicionario.inverse[0]
 
         #representa a mensagem como uma matriz e multiplica esta pela chave para criptografar
         ordem = [self.Matriz.shape[0], len(mensagem)/self.Matriz.shape[0]]
-        matriz_mensagem = MatrizModular.MatrizModular(mensagem,self.modulo,ordem,self.dicionario)
-        matriz_mensagem_criptografada = MatrizModular.MatrizModular(self.Matriz @ matriz_mensagem, self.modulo,self.dicionario)
-
+        matriz_mensagem = MatrizModular(mensagem,self.modulo,ordem,self.dicionario)
+        matriz_mensagem_criptografada = self.Matriz @ matriz_mensagem
         #converte a matriz resultado em uma string
         mensagem_criptografada = matriz_mensagem_criptografada.ConverterMatrizParaString(self.dicionario)
         return mensagem_criptografada
@@ -58,16 +57,15 @@ class CifraDeHill(AlgoritimoCriptografia.AlgoritimoCriptografia):
         #Representa a mensagem criptografada como uma matriz e a multiplica pela inversa para descriptografar
         ordem = [self.Matriz.shape[0], len(mensagem)/self.Matriz.shape[0]]
         
-        
-        matriz_mensagem_criptografada = MatrizModular.MatrizModular(mensagem,self.modulo, ordem,self.dicionario)
-        matriz_mensagem_descriptografada = MatrizModular.MatrizModular( self.MatrizInversaModular @ matriz_mensagem_criptografada, self.modulo,self.dicionario)
+        matriz_mensagem_criptografada = MatrizModular(mensagem,self.modulo, ordem,self.dicionario)
+        matriz_mensagem_descriptografada = self.MatrizInversaModular @ matriz_mensagem_criptografada
 
         mensagem_descriptografada = matriz_mensagem_descriptografada.ConverterMatrizParaString(self.dicionario)
 
-        # Remove os caracteres ( adicionados à mensagem original
+        # Remove os caracteres adicionados à mensagem original
         while True:
             n = len(mensagem_descriptografada)
-            if mensagem_descriptografada[n-1] == "(" :
+            if mensagem_descriptografada[n-1] == self.dicionario.inverse[0] :
                 mensagem_descriptografada = mensagem_descriptografada[:-1]
             else:
                 break

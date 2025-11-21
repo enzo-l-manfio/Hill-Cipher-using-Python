@@ -1,5 +1,11 @@
-import GerenciadorDeCriptografia
+from GerenciadorDeCriptografia import Cifra
 import CifraDeHill
+import string
+
+
+#Caracteres indisponíveis : "`", "{", "|", "}", "~"
+alfabeto = string.printable[:-11]
+
 
 while True:
 
@@ -16,11 +22,9 @@ while True:
                 
             # Obtem senha (chave), a qual será utilizada para encriptar/decriptar a mensagem
             senha = input("Digite a senha: ").strip()
-
-
             # Cria um objeto CifraDeHill com a senha fornecida, caso essa seja válida.
             try:
-                cifraDeHill = CifraDeHill.CifraDeHill(senha)
+                cifraDeHill = CifraDeHill.CifraDeHill(alfabeto, senha)
                 break
             except ValueError:
                 print('Impossível utilizar a senha digitada, matriz não invertível')
@@ -33,19 +37,17 @@ while True:
                 mensagem = input("Digite a mensagem: ").strip()
                 
                 # Cria um gerenciador de criptografia e define a cifra de Hill como o algoritmo a ser utilizado
-                gerenciador = GerenciadorDeCriptografia.GerenciadorDeCriptografia(cifraDeHill)
+                cifra = Cifra(cifraDeHill)
                 
                 try:
                     match escolha:
                         case 1:
-                            mensagem_criptografada = gerenciador.criptografar(mensagem)
-                    
-                            print()
+                            mensagem_criptografada = cifra.criptografar(mensagem)
                             print('Mensagem criptografada:', mensagem_criptografada, end = '\n')
                             print()
                             break
                         case 2:
-                            mensagem_descriptografada = gerenciador.descriptografar(mensagem)
+                            mensagem_descriptografada = cifra.descriptografar(mensagem)
                             
                             print()
                             print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')
