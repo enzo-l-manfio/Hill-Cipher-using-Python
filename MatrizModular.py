@@ -14,11 +14,11 @@ class MatrizModular(np.ndarray):
         #Se recebe uma string,converte em matriz modular de ordem especifica
         if(isinstance(input,str)):
             array = cls.ConverterStringParaMatriz(input,ordem,dicionario)
-            obj = np.asarray(array).view(cls)
+            obj = np.asarray(array.round()).view(cls)
 
         #Se recebe uma matriz,converte em matriz modular de ordem especifica
         elif(isinstance(input,np.ndarray)):
-            obj = np.asarray(input%cls.modulo).view(cls)
+            obj = np.asarray(input.round()%cls.modulo).view(cls)
 
         #Se recebe uma list, cria o nd array correspondente e converte-o em modular
         elif(isinstance(input, list)):
@@ -26,7 +26,7 @@ class MatrizModular(np.ndarray):
             for linha in input:
                  linhas.append([n%modulo for n in linha])
             array = np.array(linhas)
-            obj = np.asarray(array).view(cls)
+            obj = np.asarray(array.round()).view(cls)
 
         else:
             raise TypeError("Input deve ser uma string, uma list ou uma matriz numpy ndarray")
@@ -71,7 +71,7 @@ class MatrizModular(np.ndarray):
         tamanho_string = len(txt)
         vetor = [dicionario[letra] for letra in txt]
         for _ in range(int(ordem[0]*ordem[1]-tamanho_string)):
-                vetor.append(0)
+                vetor.append(1)
             
         # Cria a Matriz a partir da senha
         colunas = []
