@@ -1,12 +1,10 @@
-from Criptografo import Criptografo
-from CifraHill import CifraHill
-from Decifrador import Decifrador
-from HillKPA import HillKPA
-import string
+from src import Criptografo, CifraHill, Decifrador, HillKPA
+
+from string import printable
 
 def main():
     #Caracteres indisponíveis : "`", "{", "|", "}", "~"
-    alfabeto = string.printable[:-11]
+    alfabeto = printable[:-11]
 
 
     while True:
