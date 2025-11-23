@@ -1,4 +1,4 @@
-import AlgoritmoCriptografia
+from .AlgoritmoCriptografia import AlgoritmoCriptografia
 
 class Criptografo:
 
