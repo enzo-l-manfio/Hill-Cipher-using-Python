@@ -3,6 +3,7 @@ from src.AlgebraModular import MatrizModular
 from bidict import bidict
 from sympy import isprime
 
+#Classe para implementar o algoritmo específico da Cifra de Hill
 class CifraHill(AlgoritmoCriptografia):
 
     
@@ -15,7 +16,7 @@ class CifraHill(AlgoritmoCriptografia):
         self.dicionario =bidict(zip(alfabeto, range(self.modulo)))
         '''
         Calcula o menor quadrado perfeito maior ou igual ao tamanho da senha, n^2,
-        E adiciona o caractere ( ao final da senha até completar esse valor,
+        E adiciona o último caractere do alfabeto ao final da senha até completar esse valor,
         Para poder criar uma Matriz Quadrada de ordem n a partir da senha
         '''
         n = 0
@@ -35,7 +36,7 @@ class CifraHill(AlgoritmoCriptografia):
         
         '''
         Caso o tamanho da mensagem não for um múltiplo inteiro da ordem da Matriz
-        Adiciona o caractere ( ao final, até esse ser o caso
+        Adiciona o primeiro caractere do alfabeto ao final, até esse ser o caso
         '''
         tamanho_mensagem = len(mensagem)
         if tamanho_mensagem%self.Matriz.shape[0] != 0:

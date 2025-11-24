@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+#Classe para representar um algoritmo de decifração qualquer
+
 class AlgoritmoCriptanalise:
 
     @abstractmethod
