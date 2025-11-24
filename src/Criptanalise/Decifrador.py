@@ -1,3 +1,5 @@
+
+#Classe para implementar um determinado algoritmo de decifração
 class Decifrador:
     def __init__(self, algoritmoCriptanalise):
         self.AlgoritmoCriptanalise = algoritmoCriptanalise
