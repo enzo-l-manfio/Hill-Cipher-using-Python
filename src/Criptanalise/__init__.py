@@ -1,3 +1,3 @@
-from .AlgoritmoCriptanalise import *
-from .Decifrador import *
-from .HillKPA import *
+from .AlgoritmoCriptanaliseModule import *
+from .DecifradorModule import *
+from .HillKPAModule import *

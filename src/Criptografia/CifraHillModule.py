@@ -1,4 +1,4 @@
-from .AlgoritmoCriptografia import AlgoritmoCriptografia
+from .AlgoritmoCriptografiaModule import AlgoritmoCriptografia
 from src.AlgebraModular import MatrizModular
 from bidict import bidict
 from sympy import isprime

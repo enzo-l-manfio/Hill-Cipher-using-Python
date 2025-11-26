@@ -1,4 +1,4 @@
-from .AlgoritmoCriptanalise import AlgoritmoCriptanalise
+from .AlgoritmoCriptanaliseModule import AlgoritmoCriptanalise
 from src.AlgebraModular import MatrizModular
 from bidict import bidict
 import numpy as np
