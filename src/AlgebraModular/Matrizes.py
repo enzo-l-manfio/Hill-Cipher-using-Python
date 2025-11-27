@@ -3,7 +3,14 @@ import numpy as np
 #Herda de np.ndarray
 class MatrizModular(np.ndarray):
     
-    
+    '''
+    Como a classe NDarray aloca memória de forma diferentemente de outras classes de Python,
+    utilizamos o operador __new__, ao invés do __init__, para criar a MatrizModular como uma
+    classe filha do NDarray. __new__ é o operador que cria a instância do objeto, a qual
+    depois é repassada para o __init__ inicializá-la com atributos específicos. Devido à diferença
+    na alocação de memória entre o NDarray e as classes em Python, é preciso que o objeto seja
+    instanciado já com a alocação correspondente ao NDarray, função desempenhada pelo __new__.
+    '''
     def __new__(cls,input,modulo,ordem = None,dicionario = None):
         
         cls.modulo = modulo
@@ -14,6 +21,7 @@ class MatrizModular(np.ndarray):
         #Se recebe uma string,converte em matriz modular de ordem especifica
         if(isinstance(input,str)):
             array = cls.ConverterStringParaMatriz(input,ordem,dicionario)
+            #Utiliza-se o método view para "Converter" o objeto NDarray em um objeto MatrizModular
             obj = np.asarray(array.round()).view(cls)
 
         #Se recebe uma matriz,converte em matriz modular de ordem especifica

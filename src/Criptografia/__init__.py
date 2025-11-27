@@ -1,3 +1,3 @@
-from .AlgoritmoCriptografia import *
-from .Criptografo import *
-from .CifraHill import *
+from .AlgoritmoCriptografiaModule import *
+from .CriptografoModule import *
+from .CifraHillModule import *
