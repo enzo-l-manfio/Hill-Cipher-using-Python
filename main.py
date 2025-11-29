@@ -33,10 +33,10 @@ def main():
                 try:
                     cifraDeHill = CifraHill(alfabeto, senha)
                     break
-                except ValueError:
-                    print('Impossível utilizar a senha digitada, matriz não invertível')
-                except KeyError:
-                    print('Impossível utilizar a senha digitada, caractere não suportado')
+                except ValueError as erro:
+                    print(f'Erro: {erro}')
+                except KeyError as erro:
+                    print(f'Erro: Caractere {erro} não suportado')
         
             while True:
 
@@ -58,10 +58,10 @@ def main():
                             print('Mensagem descriptografada:', mensagem_descriptografada, end = '\n')
                             print()
                             break
-                    except KeyError:
-                        print('Impossível criptografar/descriptografar a mensagem digitada, caractere não suportado')
-                    except ValueError:
-                        print("Impossível descriptografar a mensagem digitada, tamanho da senha e mensagem incompatíveis")
+                    except KeyError as erro:
+                        print(f'Erro: {erro}')
+                    except ValueError as erro:
+                        print(f"Erro: {erro}")
         elif escolha == 3:
             # Cria o algoritmo de decifração Known-Plaintext-Attack para a Cifra de Hill
             algoritmo = HillKPA(alfabeto)
@@ -80,8 +80,8 @@ def main():
                     else:
                         print("Nenhuma senha possível determinada")
                     break
-                except ValueError:
-                    print("Erro: blocos descriptografados não correspondem aos blocos descriptografados ou possuem tamanho diferente")
+                except ValueError as erro:
+                    print(f"Erro: {erro}")
                 
         elif escolha == 0:
             break
