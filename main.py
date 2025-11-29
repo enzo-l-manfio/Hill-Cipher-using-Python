@@ -6,7 +6,6 @@ def main():
     #Caracteres indisponíveis : "`", "{", "|", "}", "~"
     alfabeto = printable[:-11]
 
-
     while True:
         print()
         print('Criptógrafo de Hill')
@@ -68,8 +67,8 @@ def main():
             # Instancia o decifrador
             decifrador = Decifrador(algoritmo)
             while True:
-                blocos_criptografados = input("Escreva os blocos criptografados, espaçados:").split(" ")
-                blocos_descriptografados = input("Escreva os seus correspondentes descriptografados, espaçados:").split(" ")
+                blocos_criptografados = input("Escreva os blocos criptografados, espaçados: ").split(" ")
+                blocos_descriptografados = input("Escreva os seus correspondentes descriptografados, espaçados: ").split(" ")
                 try: 
                     possiveis_senhas = decifrador.Decifrar(blocos_criptografados, blocos_descriptografados)
                     if possiveis_senhas:

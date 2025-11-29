@@ -1,3 +1,3 @@
 from . import *
 from .Criptografia import *
-from .Criptanalise import *
+from .Criptoanalise import *

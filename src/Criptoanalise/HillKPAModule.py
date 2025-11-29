@@ -1,11 +1,11 @@
-from .AlgoritmoCriptanaliseModule import AlgoritmoCriptanalise
+from .AlgoritmoCriptoanaliseModule import AlgoritmoCriptoanalise
 from src.AlgebraModular import MatrizModular
 from bidict import bidict
 import numpy as np
 
 #Algoritmo de decifração Known-Plaintext-Attack (KPA) para a Cifra de Hill
 
-class HillKPA(AlgoritmoCriptanalise):
+class HillKPA(AlgoritmoCriptoanalise):
     def __init__(self, alfabeto):
         self.modulo = len(alfabeto)
         self.dicionario = bidict(zip(alfabeto, range(self.modulo)))
