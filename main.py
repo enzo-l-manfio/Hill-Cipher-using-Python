@@ -63,9 +63,9 @@ def main():
                     except ValueError:
                         print("Impossível descriptografar a mensagem digitada, tamanho da senha e mensagem incompatíveis")
         elif escolha == 3:
-            #cria o algoritmo de decifração Known-Plaintext-Attack para a Cifra de Hill
+            # Cria o algoritmo de decifração Known-Plaintext-Attack para a Cifra de Hill
             algoritmo = HillKPA(alfabeto)
-            #Instancia o decifrador
+            # Instancia o decifrador
             decifrador = Decifrador(algoritmo)
             while True:
                 blocos_criptografados = input("Escreva os blocos criptografados, espaçados:").split(" ")

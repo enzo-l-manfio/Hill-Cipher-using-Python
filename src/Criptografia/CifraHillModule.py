@@ -8,22 +8,27 @@ class CifraHill(AlgoritmoCriptografia):
 
     
     def __init__(self, alfabeto, senha):
+        
         self.modulo = len(alfabeto)
+        
         if not isprime(self.modulo) :
             raise ValueError("Modulo precisa ser primo")
         self.senha = senha
-        #cria um dicionario bidirecional, com caracteres como keys e numeros como values
+        
+        # Cria um dicionario bidirecional, mapeando cada caractere (key) a um valor numérico (value) até N°Modulo-1
+        # Exemplo: {'A':0, 'B':1, ... 'N': N°Modulo-1}
         self.dicionario =bidict(zip(alfabeto, range(self.modulo)))
-        '''
-        Calcula o menor quadrado perfeito maior ou igual ao tamanho da senha, n^2,
-        E adiciona o último caractere do alfabeto ao final da senha até completar esse valor,
-        Para poder criar uma Matriz Quadrada de ordem n a partir da senha
-        '''
+        
+        # Calcula o menor quadrado perfeito maior ou igual ao tamanho da senha, pois a matriz senha precisa ser quadrada para ser invertível
         n = 0
         while(pow(n, 2)<len(self.senha)):
             n += 1
 
+        # Adiciona o último caractere do alfabeto ao final da senha até completar esse valor, como um preenchimento (escolha arbitrária)
         for _ in range( n**2 - len(senha)):
+            # Em dicionario.inverse, o caractere corresponde ao valor e o valor numérico do caractere corresponde à chave
+            # Exemplo: {0:'A', 1:'B', ... N°Modulo-1 : 'N'}
+            
             senha += self.dicionario.inverse[self.modulo - 1]
 
         # Cria a Matriz a partir da senha, e determina a sua Inversa Modular

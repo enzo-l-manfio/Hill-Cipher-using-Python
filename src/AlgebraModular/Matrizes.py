@@ -1,6 +1,6 @@
 import numpy as np
 
-#Herda de np.ndarray
+# Herda de np.ndarray
 class MatrizModular(np.ndarray):
     
     '''
@@ -54,7 +54,7 @@ class MatrizModular(np.ndarray):
 
     '''
     Função para calcular a inversa modular da Matriz. A inversa modular é
-    Igual à conjugada vezes o inverso modular do determinante da Matriz.
+    igual à conjugada vezes o inverso modular do determinante da Matriz.
     A matriz conjugada será igual à matriz inversa convecional multiplicado pelo determinante,
     e, para o cálculo do inverso modular, será considerado que o módulo é primo,
     caso em que o inverso modular do determinante seré igual a este elevado ao modulo menos 2
@@ -72,7 +72,7 @@ class MatrizModular(np.ndarray):
             inversa = adjunta * pow(det_mod, cls.modulo-2, cls.modulo)
             return inversa
 
-    #função para converter uma string em uma matriz de determinada ordem
+    # Função para converter uma string em uma matriz de determinada ordem
     @classmethod
     def ConverterStringParaMatriz(cls,txt,ordem, dicionario):
         ordem = [int(o) for o in ordem]
@@ -90,12 +90,12 @@ class MatrizModular(np.ndarray):
             colunas.append(coluna)
         return np.transpose(np.array(colunas))
 
-    def ConverterMatrizParaString(cls,dicionario):
+    def ConverterMatrizParaString(cls,dicionarioCaractereValor):
         string = ''
         matriz = np.transpose(cls)
         for coluna in matriz:
             for elemento in coluna:
-                string += dicionario.inverse[round(elemento)%cls.modulo]
+                string += dicionarioCaractereValor.inverse[round(elemento)%cls.modulo]
         return string
 
 
