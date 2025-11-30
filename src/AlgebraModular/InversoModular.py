@@ -3,12 +3,8 @@ from numpy import gcd
 
 def inversoModular(numero, modulo):
 
-    #Caso o módulo é primo, utiliza o Teorema de Euler
-    if isprime(modulo):
-        inverso =  pow(numero, modulo-2, modulo)
-    
     #Se o módulo e o número forem primos entre si, o inverso não existe
-    elif gcd(numero, modulo) != 1:
+    if gcd(numero, modulo) != 1:
         inverso = None
 
     #Se o módulo não for primo e o inverso existir, aplica o Algoritmo Extendido de Euclides
