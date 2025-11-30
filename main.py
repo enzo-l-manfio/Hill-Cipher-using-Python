@@ -4,7 +4,7 @@ from string import printable
 
 def main():
     #Caracteres indisponíveis : "`", "{", "|", "}", "~"
-    alfabeto = "0123456789A"
+    alfabeto = printable[:-11]
 
     while True:
         print()
