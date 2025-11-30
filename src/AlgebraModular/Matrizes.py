@@ -1,5 +1,5 @@
 import numpy as np
-
+from src.AlgebraModular.InversoModular import inversoModular
 # Herda de np.ndarray
 class MatrizModular(np.ndarray):
     
@@ -64,12 +64,12 @@ class MatrizModular(np.ndarray):
                 raise ValueError("Matriz nao Invertível")
             
             det_mod = round(np.linalg.det(cls)) % cls.modulo
-
-            if np.gcd(det_mod, cls.modulo) != 1:
-                raise ValueError(f"Matriz não invertível para modulo {cls.modulo}")
+            inverso_det = inversoModular(det_mod, cls.modulo)
+            if not inverso_det:
+                raise ValueError(f"Matriz não invertível para módulo {cls.modulo}")
 
             adjunta = MatrizModular(np.linalg.inv(cls)*np.linalg.det(cls),cls.modulo)
-            inversa = adjunta * pow(det_mod, cls.modulo-2, cls.modulo)
+            inversa = adjunta * inverso_det
             return inversa
 
     # Função para converter uma string em uma matriz de determinada ordem

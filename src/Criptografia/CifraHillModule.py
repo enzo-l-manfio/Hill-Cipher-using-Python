@@ -1,7 +1,6 @@
 from .AlgoritmoCriptografiaModule import AlgoritmoCriptografia
 from src.AlgebraModular import MatrizModular
 from bidict import bidict
-from sympy import isprime
 
 #Classe para implementar o algoritmo específico da Cifra de Hill
 class CifraHill(AlgoritmoCriptografia):
@@ -11,8 +10,6 @@ class CifraHill(AlgoritmoCriptografia):
         
         self.modulo = len(alfabeto)
         
-        if not isprime(self.modulo) :
-            raise ValueError("Modulo precisa ser primo")
         self.senha = senha
         
         # Cria um dicionario bidirecional, mapeando cada caractere (key) a um valor numérico (value) até N°Modulo-1
