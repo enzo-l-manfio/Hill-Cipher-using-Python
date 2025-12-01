@@ -1,5 +1,8 @@
 import numpy as np
 
+#Importa o ALgoritmo Extendido de Euclides para números inteiros
+from sympy.core.intfunc import igcdex
+
 # Herda de np.ndarray
 class MatrizModular(np.ndarray):
     
@@ -64,12 +67,14 @@ class MatrizModular(np.ndarray):
                 raise ValueError("Matriz nao Invertível")
             
             det_mod = round(np.linalg.det(cls)) % cls.modulo
-
-            if np.gcd(det_mod, cls.modulo) != 1:
-                raise ValueError(f"Matriz não invertível para modulo {cls.modulo}")
+            if igcdex(det_mod, cls.modulo)[2] != 1:
+                raise ValueError(f"Matriz não invertível para módulo {cls.modulo}")
+            
+            #Calcula o inverso multiplicativo modular com o Algoritmo Ext. de Euclides
+            inverso_det = igcdex(det_mod, cls.modulo)[0]
 
             adjunta = MatrizModular(np.linalg.inv(cls)*np.linalg.det(cls),cls.modulo)
-            inversa = adjunta * pow(det_mod, cls.modulo-2, cls.modulo)
+            inversa = adjunta * inverso_det
             return inversa
 
     # Função para converter uma string em uma matriz de determinada ordem
